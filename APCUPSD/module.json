@@ -1,0 +1,11 @@
+{
+	"id": "{3D46AB77-6A09-4614-876D-E4781EFD5046}",
+	"name": "APCUPSD",
+	"type": 3,
+	"vendor": "Ulrich Bittner",
+	"aliases": [ "APCUPSD" ],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "APCUPSD"
+}
