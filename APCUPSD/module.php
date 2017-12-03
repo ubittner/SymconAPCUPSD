@@ -95,7 +95,7 @@ class APCUPSD extends IPSModule
 
 	protected function CheckCategory()
 	{
-		$category = $this->ReadPropertyInteger("Category");
+		$category = $this->ReadPropertyInteger("CategoryID");
 		if (category) {
 			IPS_SetParent($this->InstanceID, $category);
 		}
