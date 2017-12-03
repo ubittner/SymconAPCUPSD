@@ -73,7 +73,7 @@ class APCUPSD extends IPSModule
 	public function CheckStatus()
 	{
 		$result = $this->GetStatus();
-		return $result;
+
 		// check empty array
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
 		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
@@ -81,7 +81,7 @@ class APCUPSD extends IPSModule
 		// missing boolean alert
 		SetValue($this->GetIDForIdent("UPSTimeLeft"), $result["TIMELEFT"]);
 
-
+		return $result;
 
 		/*
 		$status = $dataArray["STATUS"] ;
