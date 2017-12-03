@@ -3,8 +3,10 @@
 	[
 		{ "type": "Label", "label": "APCUPSD - Version 1.00 (2017-12-03, 11:30)"},
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
-		{ "type": "Label", "label": "APCUPSD Server"},
+		{ "type": "ValidationTextBox", "name": "Description", "caption": "Description" },
 		{ "type": "SelectCategory",	"name":	"CategoryID", "caption": "Category" },
+		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
+		{ "type": "Label", "label": "APCUPSD Server"},
 		{ "type": "ValidationTextBox", "name": "IPAddress", "caption": "IP Address" },
 		{ "type": "IntervalBox", "name": "UpdateTimer", "caption": "Seconds" },
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
@@ -16,7 +18,7 @@
 	],
 	"status":
 	[
-		{ "code": 101, "icon": "active", "caption": "APCUPSD will be created." },
+		{ "code": 101, "icon": "active", "caption": "APCUPSD will be created. Please complete configuration." },
 		{ "code": 102, "icon": "active", "caption": "APCUPSD is active." },
 		{ "code": 103, "icon": "active", "caption": "APCUPSD will be deleted." },
 		{ "code": 104, "icon": "inactive", "caption": "APCUPSD is inactive." },

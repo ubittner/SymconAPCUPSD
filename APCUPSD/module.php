@@ -28,27 +28,39 @@ class APCUPSD extends IPSModule
 		parent::Create();
 
 		// register properties
-		$this->RegisterPropertyString("CategoryID", 0);
+		$this->RegisterPropertyString("Description", "");
+		$this->RegisterPropertyInteger("CategoryID", 0);
 		$this->RegisterPropertyString("IPAddress", "");
 		$this->RegisterPropertyInteger("UpdateTimer", 300);
 		$this->RegisterPropertyString("WebFrontID", 0);
 		$this->RegisterPropertyBoolean("UseNotification", false);
 		// register timer
 		$this->RegisterTimer("UpdateInformation", 0, 'APCUPSD_CheckStatus($_IPS[\'TARGET\']);');
+
+		// register profiles
+
+		// register variables
+		$this->RegisterVariableString("UPSName", $this->Translate("Name"), "", 1);
+		IPS_SetIcon($this->GetIDForIdent("UPSName"), "Information");
+		$this->RegisterVariableString("UPSModel", $this->Translate("Model"), "", 2);
+		IPS_SetIcon($this->GetIDForIdent("UPSModel"), "Information");
+		$this->RegisterVariableString("UPSStatus", $this->Translate("Status"), "", 3);
+		IPS_SetIcon($this->GetIDForIdent("UPSStatus"), "Information");
+		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "", 4);
+		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
+		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left"), "", 5);
+		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Information");
+
 	}
 
 	public function ApplyChanges()
 	{
 		parent::ApplyChanges();
 
+		$this->CheckDescription();
+		$this->CheckCategory();
 		$this->CheckConfiguration();
-
-		$status = IPS_GetInstance($this->InstanceID)["InstanceStatus"];
-		if ($status == 102) {
-			// update timer
-			$intervall = ($this->ReadPropertyInteger("UpdateTimer"))*1000;
-			$this->SetTimerInterval("UpdateInformation", $intervall);
-		}
+		$this->SetUpdateTimer();
 	}
 
 
@@ -71,6 +83,57 @@ class APCUPSD extends IPSModule
 
 
 	########## protected functions ##########
+
+	protected function CheckDescription()
+	{
+		$description = $this->ReadPropertyString("Description");
+		if ($description != "") {
+			IPS_SetName($this->InstanceID, $description);
+		}
+	}
+
+
+	protected function CheckCategory()
+	{
+		$category = $this->ReadPropertyInteger("Category");
+		if (category) {
+			IPS_SetParent($this->InstanceID, $category);
+		}
+	}
+
+
+	protected function CheckConfiguration()
+	{
+		$webFrontID = $this->ReadPropertyString ("WebFrontID");
+		$useNotification = $this->ReadPropertyBoolean ("UseNotification");
+		if ($useNotification == true && $webFrontID == 0) {
+			$this->SetStatus(201);
+		}
+		else {
+			if ($webFrontID != 0) {
+				$instanceInfo = IPS_GetInstance ($webFrontID);
+				$moduleName = $instanceInfo["ModuleInfo"]["ModuleName"];
+				$moduleType = $instanceInfo["ModuleInfo"]["ModuleType"];
+				if ($moduleName = "WebFront Configurator" && $moduleType == 4) {
+					$this->SetStatus(102);
+				}
+				else {
+					$this->SetStatus(202);
+				}
+			}
+		}
+	}
+
+
+	protected function SetUpdateTimer()
+	{
+		$status = IPS_GetInstance($this->InstanceID)["InstanceStatus"];
+		if ($status == 102) {
+			$intervall = ($this->ReadPropertyInteger("UpdateTimer"))*1000;
+			$this->SetTimerInterval("UpdateInformation", $intervall);
+		}
+	}
+
 
 	protected function GetStatus ()
 	{
@@ -95,30 +158,6 @@ class APCUPSD extends IPSModule
 			return ($dataArray) ? $dataArray: false;
 		}
 	}
-
-
-	protected function CheckConfiguration ()
-	{
-		$webFrontID = $this->ReadPropertyString ("WebFrontID");
-		$useNotification = $this->ReadPropertyBoolean ("UseNotification");
-		if ($useNotification == true && $webFrontID == 0) {
-			$this->SetStatus(201);
-		}
-		else {
-			if ($webFrontID != 0) {
-				$instanceInfo = IPS_GetInstance ($webFrontID);
-				$moduleName = $instanceInfo["ModuleInfo"]["ModuleName"];
-				$moduleType = $instanceInfo["ModuleInfo"]["ModuleType"];
-				if ($moduleName = "WebFront Configurator" && $moduleType == 4) {
-					$this->SetStatus(102);
-				}
-				else {
-					$this->SetStatus(202);
-				}
-			}
-		}
-	}
-
 
 }
 ?>

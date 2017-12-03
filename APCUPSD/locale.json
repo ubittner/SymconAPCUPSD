@@ -1,19 +1,24 @@
 {
    "translations": {
                      "de": {
+                              "Description": "Bezeichnung",
                               "Category": "Kategorie",
                               "IP Address": "IP Adresse",
                               "Seconds": "Sekunden",
                               "Notification": "Benachrichtigung",
                               "activated": "aktiviert",
                               "Check Status": "Status prüfen",
-                              "APCUPSD will be created.": "APCUPSD wird erstellt.",
+                              "APCUPSD will be created. Please complete configuration.": "APCUPSD wird erstellt. Bitte Konfigurationsdaten vervollständigen.",
                               "APCUPSD is active.": "APCUPSD ist aktiv.",
                               "APCUPSD will be deleted.": "APCUPSD wird gelöscht.",
                               "APCUPSD is inactive.": "APCUPSD ist inaktiv.",
                               "Please choose WebFront ID for notification!": "Bitte WebFront ID für Benachrichtigungen auswählen!",
                               "Please use a valid WebFront ID!": "Bitte eine gültige WebFront ID auswählen!",
-                              "An unknown error has occurred!": "Es ist ein unbekannter Fehler aufgetreten!"
+                              "An unknown error has occurred!": "Es ist ein unbekannter Fehler aufgetreten!",
+                              "Name": "Bezeichnung",
+                              "Model": "Modell",
+                              "Alert": "Alarm",
+                              "Time left": "Überbrückungszeit"
                            }
                   }
 }
