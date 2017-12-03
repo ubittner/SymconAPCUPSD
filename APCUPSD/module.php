@@ -48,7 +48,7 @@ class APCUPSD extends IPSModule
 		IPS_SetIcon($this->GetIDForIdent("UPSStatus"), "Information");
 		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "", 4);
 		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
-		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left"), "", 5);
+		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "", 5);
 		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Information");
 
 	}
@@ -73,7 +73,14 @@ class APCUPSD extends IPSModule
 	public function CheckStatus()
 	{
 		$result = $this->GetStatus();
-		print_r($result);
+		// check empty array
+		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
+		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
+		SetValue($this->GetIDForIdent("UPSStatus"), $result["STATUS"]);
+		// missing boolean alert
+		SetValue($this->GetIDForIdent("UPSTimeLeft"), $result["TIMELEFT"]);
+
+		
 
 		/*
 		$status = $dataArray["STATUS"] ;
@@ -116,6 +123,8 @@ class APCUPSD extends IPSModule
 				$moduleType = $instanceInfo["ModuleInfo"]["ModuleType"];
 				if ($moduleName = "WebFront Configurator" && $moduleType == 4) {
 					$this->SetStatus(102);
+					// get ups information
+					$this->CheckStatus();
 				}
 				else {
 					$this->SetStatus(202);

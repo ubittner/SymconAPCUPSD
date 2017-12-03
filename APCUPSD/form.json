@@ -14,11 +14,11 @@
 		{ "type": "SelectInstance", "name": "WebFrontID", "caption": "WebFront" },
 		{ "type": "CheckBox", "name": "UseNotification", "caption": "activated" },
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
-		{ "type": "Button", "label": "Check Status", "onClick": "APCUPSD_CheckStatus($id);" }
+		{ "type": "Button", "label": "Check Status", "onClick": "$result = APCUPSD_CheckStatus($id); print_r($result);" }
 	],
 	"status":
 	[
-		{ "code": 101, "icon": "active", "caption": "APCUPSD will be created. Please complete configuration." },
+		{ "code": 101, "icon": "active", "caption": "APCUPSD was created. Please complete configuration." },
 		{ "code": 102, "icon": "active", "caption": "APCUPSD is active." },
 		{ "code": 103, "icon": "active", "caption": "APCUPSD will be deleted." },
 		{ "code": 104, "icon": "inactive", "caption": "APCUPSD is inactive." },
