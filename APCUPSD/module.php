@@ -46,7 +46,8 @@ class APCUPSD extends IPSModule
 		IPS_SetIcon($this->GetIDForIdent("UPSModel"), "Information");
 		$this->RegisterVariableString("UPSStatus", $this->Translate("Status"), "", 3);
 		IPS_SetIcon($this->GetIDForIdent("UPSStatus"), "Information");
-		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), false, 4);
+		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "", 4);
+		SetValue($this->GetIDForIdent("UPSAlert"), false);
 		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
 		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "", 5);
 		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Information");
@@ -92,7 +93,7 @@ class APCUPSD extends IPSModule
 		return $result;
 
 		if($actualStatus != $lastStatus) {
-			$this->SendNotification();
+			$this->SendNotification($notificationText);
 		}
 	}
 
@@ -185,7 +186,8 @@ class APCUPSD extends IPSModule
 		$useNotification = $this->ReadPropertyBoolean("UseNotification");
 		$notificationTitle = "Stromversorgung";
 		if ($useNotification == true && $webFront == true) {
-			WFC_PushNotification($webFrontID, $notificationTitle, $notificationText, "", 0);
+			//WFC_PushNotification($webFrontID, $notificationTitle, $notificationText, "", 0);
+			WFC_SendNotification($webFrontID, $notificationTitle, $NotificationText, 'Speaker', 4);
 		}
 	}
 
