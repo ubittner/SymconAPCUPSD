@@ -90,7 +90,7 @@ class APCUPSD extends IPSModule
 			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
 		}
 		SetValue($this->GetIDForIdent("UPSAlert"), $alert);
-		if($actualStatus != $lastStatus) {
+		if($alert != $lastStatus) {
 			$this->SendNotification($notificationText);
 		}
 		return $result;
