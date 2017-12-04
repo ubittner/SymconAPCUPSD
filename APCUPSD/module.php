@@ -46,7 +46,7 @@ class APCUPSD extends IPSModule
 		IPS_SetIcon($this->GetIDForIdent("UPSModel"), "Information");
 		$this->RegisterVariableString("UPSStatus", $this->Translate("Status"), "", 3);
 		IPS_SetIcon($this->GetIDForIdent("UPSStatus"), "Information");
-		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "", 4);
+		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), false, 4);
 		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
 		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "", 5);
 		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Information");
@@ -72,21 +72,28 @@ class APCUPSD extends IPSModule
 
 	public function CheckStatus()
 	{
-		$result = $this->GetStatus();
+		$lastStatus = GetValue($this->GetIDForIdent("UPSAlert"));
 
+		$result = $this->GetStatus();
 		// check empty array
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
 		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
-		SetValue($this->GetIDForIdent("UPSStatus"), $result["STATUS"]);
-		// missing boolean alert
-		SetValue($this->GetIDForIdent("UPSTimeLeft"), $result["TIMELEFT"]);
-
+		$actualStatus = $result["STATUS"];
+		SetValue($this->GetIDForIdent("UPSStatus"), $result);
+		$timeLeft = $result["TIMELEFT"];
+		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
+		$alert = false;
+		$notificationText = "OK";
+		if ($actualStatus == "ON BATTERY") {
+			$alert = true;
+			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
+		}
+		SetValue($this->GetIDForIdent("UPSAlert"), $alert);
 		return $result;
 
-		/*
-		$status = $dataArray["STATUS"] ;
-		$nomPower = $dataArray["NOMPOWER"] ;
-	 	 */
+		if($actualStatus != $lastStatus) {
+			$this->SendNotification();
+		}
 	}
 
 
@@ -166,6 +173,19 @@ class APCUPSD extends IPSModule
 				$dataArray[$keyName] = $value;
 			}
 			return ($dataArray) ? $dataArray: false;
+		}
+	}
+
+	protected function SendNotification(string $NotificationText)
+	{
+		$webFrontID = $this->ReadPropertyString("WebFrontID");
+		if (IPS_InstanceExists($webFrontID)) {
+			$webFront = true;
+		}
+		$useNotification = $this->ReadPropertyBoolean("UseNotification");
+		$notificationTitle = "Stromversorgung";
+		if ($useNotification == true && $webFront == true) {
+			WFC_PushNotification($webFrontID, $notificationTitle, $notificationText, "", 0);
 		}
 	}
 

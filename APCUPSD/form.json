@@ -14,7 +14,7 @@
 		{ "type": "SelectInstance", "name": "WebFrontID", "caption": "WebFront" },
 		{ "type": "CheckBox", "name": "UseNotification", "caption": "activated" },
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
-		{ "type": "Button", "label": "Check Status", "onClick": "$result = APCUPSD_CheckStatus($id); print_r($result);" }
+		{ "type": "Button", "label": "Check Status", "onClick": "$result=APCUPSD_CheckStatus($id); print_r($result);" }
 	],
 	"status":
 	[
