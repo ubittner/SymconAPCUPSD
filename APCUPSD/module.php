@@ -46,7 +46,7 @@ class APCUPSD extends IPSModule
 		IPS_SetIcon($this->GetIDForIdent("UPSModel"), "Information");
 		$this->RegisterVariableString("UPSStatus", $this->Translate("Status"), "", 3);
 		IPS_SetIcon($this->GetIDForIdent("UPSStatus"), "Information");
-		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "", 4);
+		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "~Alert", 4);
 		SetValue($this->GetIDForIdent("UPSAlert"), false);
 		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
 		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "", 5);
@@ -79,14 +79,12 @@ class APCUPSD extends IPSModule
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
 		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
 		$actualStatus = $result["STATUS"];
-		var_dump($actualStatus);
 		SetValue($this->GetIDForIdent("UPSStatus"), $actualStatus);
 		$timeLeft = $result["TIMELEFT"];
 		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
 		$alert = false;
 		$notificationText = "OK";
 		if ($actualStatus == "ONBATT ") {
-			echo "yes!";
 			$alert = true;
 			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
 		}
