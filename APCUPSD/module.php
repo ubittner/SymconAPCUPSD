@@ -86,6 +86,7 @@ class APCUPSD extends IPSModule
 		$alert = false;
 		$notificationText = "OK";
 		if ($actualStatus === "ONBATT") {
+			echo "yes!";
 			$alert = true;
 			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
 		}
