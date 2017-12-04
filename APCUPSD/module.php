@@ -74,7 +74,7 @@ class APCUPSD extends IPSModule
 	public function CheckStatus()
 	{
 		$lastStatus = GetValue($this->GetIDForIdent("UPSAlert"));
-
+		echo "LStatus: ".$lastStatus;
 		$result = $this->GetStatus();
 		// check empty array
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
@@ -85,16 +85,15 @@ class APCUPSD extends IPSModule
 		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
 		$alert = false;
 		$notificationText = "OK";
-		if ($actualStatus == "ONBATT ") {
+		if ($actualStatus == "ONBATT") {
 			$alert = true;
 			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
 		}
 		SetValue($this->GetIDForIdent("UPSAlert"), $alert);
-		return $result;
-
 		if($actualStatus != $lastStatus) {
 			$this->SendNotification($notificationText);
 		}
+		return $result;
 	}
 
 
