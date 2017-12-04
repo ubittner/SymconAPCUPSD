@@ -170,7 +170,7 @@ class APCUPSD extends IPSModule
 			foreach ($data as $element) {
 				$length = strpos($element, ":");
 				$keyName = str_replace(' ', '', substr($element, 0, $length));
-				$value = substr(strstr($element, ':'), 1);
+				$value = substr(strstr($element, ':'), 2);
 				$dataArray[$keyName] = $value;
 			}
 			return ($dataArray) ? $dataArray: false;
