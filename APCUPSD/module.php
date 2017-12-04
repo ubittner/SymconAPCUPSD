@@ -74,12 +74,12 @@ class APCUPSD extends IPSModule
 	public function CheckStatus()
 	{
 		$lastStatus = GetValue($this->GetIDForIdent("UPSAlert"));
-		echo "LStatus: ".$lastStatus;
 		$result = $this->GetStatus();
 		// check empty array
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
 		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
 		$actualStatus = $result["STATUS"];
+		echo "AS:".$actualStatus;
 		SetValue($this->GetIDForIdent("UPSStatus"), $actualStatus);
 		$timeLeft = $result["TIMELEFT"];
 		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
