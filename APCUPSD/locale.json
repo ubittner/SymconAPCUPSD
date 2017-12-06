@@ -9,7 +9,7 @@
                               "Notification": "Benachrichtigung",
                               "activated": "aktiviert",
                               "Check Status": "Status prüfen",
-                              "APCUPSD will be created. Please complete configuration.": "APCUPSD wurde erstellt. Bitte Konfigurationsdaten vervollständigen.",
+                              "APCUPSD was created. Please complete configuration.": "APCUPSD wurde erstellt. Bitte Konfigurationsdaten vervollständigen.",
                               "APCUPSD is active.": "APCUPSD ist aktiv.",
                               "APCUPSD will be deleted.": "APCUPSD wird gelöscht.",
                               "APCUPSD is inactive.": "APCUPSD ist inaktiv.",
