@@ -82,10 +82,11 @@ class APCUPSD extends IPSModule
 			$actualStatus = $result["STATUS"];
 			SetValue($this->GetIDForIdent("UPSStatus"), $actualStatus);
 			$timeLeft = $result["TIMELEFT"];
+			$timeLeft = str_replace(" Minutes", '', $timeLeft);
+			$timeLeft = str_replace(".", ',', $timeLeft);
 			SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
 			$alert = false;
 			$notificationText = "OK";
-			var_dump($actualStatus);
 			if ($actualStatus == "ONBATT") {
 				$alert = true;
 				$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
