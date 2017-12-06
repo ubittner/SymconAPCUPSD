@@ -4,6 +4,7 @@
                               "Description": "Bezeichnung",
                               "Category": "Kategorie",
                               "IP Address": "IP Adresse",
+                              "Milliseconds": "Millisekunden",
                               "Seconds": "Sekunden",
                               "Notification": "Benachrichtigung",
                               "activated": "aktiviert",

@@ -31,6 +31,7 @@ class APCUPSD extends IPSModule
 		$this->RegisterPropertyString("Description", "");
 		$this->RegisterPropertyInteger("CategoryID", 0);
 		$this->RegisterPropertyString("IPAddress", "");
+		$this->RegisterPropertyInteger("Timeout", 2000);
 		$this->RegisterPropertyInteger("UpdateTimer", 300);
 		$this->RegisterPropertyString("WebFrontID", 0);
 		$this->RegisterPropertyBoolean("UseNotification", false);
@@ -75,7 +76,9 @@ class APCUPSD extends IPSModule
 	{
 		$lastStatus = GetValue($this->GetIDForIdent("UPSAlert"));
 		$result = $this->GetStatus();
-		// check empty array
+		if ($result == false) {
+			echo "Array ist leer";
+		}
 		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
 		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
 		$actualStatus = $result["STATUS"];
@@ -84,7 +87,8 @@ class APCUPSD extends IPSModule
 		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
 		$alert = false;
 		$notificationText = "OK";
-		if ($actualStatus == "ONBATT ") {
+		var_dump($actualStatus);
+		if ($actualStatus == "ONBATT") {
 			$alert = true;
 			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
 		}
@@ -155,21 +159,24 @@ class APCUPSD extends IPSModule
 	{
 		$ip = $this->ReadPropertyString("IPAddress");
 		if ($ip != "") {
-			$url = "http://".$ip."/cgi-bin/apcupsd/upsfstats.cgi?host=127.0.0.1";
-			$ch = curl_init();
-			curl_setopt_array($ch, array(	CURLOPT_URL 				=> $url,
-													CURLOPT_HEADER 			=> false,
-													CURLOPT_RETURNTRANSFER	=> true));
-			$result = curl_exec($ch);
-			curl_close($ch);
-			$xmlData = new SimpleXMLElement($result);
-			$data = preg_split( "(\n)", $xmlData->body->blockquote->pre);
-			$dataArray = array();
-			foreach ($data as $element) {
-				$length = strpos($element, ":");
-				$keyName = str_replace(' ', '', substr($element, 0, $length));
-				$value = substr(strstr($element, ':'), 2);
-				$dataArray[$keyName] = $value;
+			$timeout = $this->ReadPropertyInteger("Timeout");
+			if ($timeout && Sys_Ping($ip, $timeout) == true) {
+				$url = "http://".$ip."/cgi-bin/apcupsd/upsfstats.cgi?host=127.0.0.1";
+				$ch = curl_init();
+				curl_setopt_array($ch, array(	CURLOPT_URL 				=> $url,
+														CURLOPT_HEADER 			=> false,
+														CURLOPT_RETURNTRANSFER	=> true));
+				$result = curl_exec($ch);
+				curl_close($ch);
+				$xmlData = new SimpleXMLElement($result);
+				$data = preg_split( "(\n)", $xmlData->body->blockquote->pre);
+				$dataArray = array();
+				foreach ($data as $element) {
+					$length = strpos($element, ":");
+					$keyName = str_replace(' ', '', substr($element, 0, $length));
+					$value = rtrim(substr(strstr($element, ':'), 2));
+					$dataArray[$keyName] = $value;
+				}
 			}
 			return ($dataArray) ? $dataArray: false;
 		}

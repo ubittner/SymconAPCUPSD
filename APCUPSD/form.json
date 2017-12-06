@@ -8,6 +8,7 @@
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
 		{ "type": "Label", "label": "APCUPSD Server"},
 		{ "type": "ValidationTextBox", "name": "IPAddress", "caption": "IP Address" },
+		{ "type": "IntervalBox", "name": "Timeout", "caption": "Milliseconds" },
 		{ "type": "IntervalBox", "name": "UpdateTimer", "caption": "Seconds" },
 		{ "type": "Label", "label": "----------------------------------------------------------------------------------------------------------------------------------"},
 		{ "type": "Label", "label": "Notification"},
