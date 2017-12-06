@@ -76,25 +76,24 @@ class APCUPSD extends IPSModule
 	{
 		$lastStatus = GetValue($this->GetIDForIdent("UPSAlert"));
 		$result = $this->GetStatus();
-		if ($result == false) {
-			echo "Array ist leer";
-		}
-		SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
-		SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
-		$actualStatus = $result["STATUS"];
-		SetValue($this->GetIDForIdent("UPSStatus"), $actualStatus);
-		$timeLeft = $result["TIMELEFT"];
-		SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
-		$alert = false;
-		$notificationText = "OK";
-		var_dump($actualStatus);
-		if ($actualStatus == "ONBATT") {
-			$alert = true;
-			$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
-		}
-		SetValue($this->GetIDForIdent("UPSAlert"), $alert);
-		if($alert != $lastStatus) {
-			$this->SendNotification($notificationText);
+		if (!empty($result)) {
+			SetValue($this->GetIDForIdent("UPSName"), $result["UPSNAME"]);
+			SetValue($this->GetIDForIdent("UPSModel"), $result["MODEL"]);
+			$actualStatus = $result["STATUS"];
+			SetValue($this->GetIDForIdent("UPSStatus"), $actualStatus);
+			$timeLeft = $result["TIMELEFT"];
+			SetValue($this->GetIDForIdent("UPSTimeLeft"), $timeLeft);
+			$alert = false;
+			$notificationText = "OK";
+			var_dump($actualStatus);
+			if ($actualStatus == "ONBATT") {
+				$alert = true;
+				$notificationText = "Stromausfall. USV aktiv. Vorausichtliche Überbrückungszeit {$timeLeft}.";
+			}
+			SetValue($this->GetIDForIdent("UPSAlert"), $alert);
+			if($alert != $lastStatus) {
+				$this->SendNotification($notificationText);
+			}
 		}
 		return $result;
 	}
@@ -158,6 +157,7 @@ class APCUPSD extends IPSModule
 	protected function GetStatus ()
 	{
 		$ip = $this->ReadPropertyString("IPAddress");
+		$dataArray = array();
 		if ($ip != "") {
 			$timeout = $this->ReadPropertyInteger("Timeout");
 			if ($timeout && Sys_Ping($ip, $timeout) == true) {
@@ -178,8 +178,8 @@ class APCUPSD extends IPSModule
 					$dataArray[$keyName] = $value;
 				}
 			}
-			return ($dataArray) ? $dataArray: false;
 		}
+		return ($dataArray) ? $dataArray: false;
 	}
 
 	protected function SendNotification(string $NotificationText)
