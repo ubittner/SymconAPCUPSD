@@ -50,8 +50,8 @@ class APCUPSD extends IPSModule
 		$this->RegisterVariableBoolean("UPSAlert", $this->Translate("Alert"), "~Alert", 4);
 		SetValue($this->GetIDForIdent("UPSAlert"), false);
 		IPS_SetIcon($this->GetIDForIdent("UPSAlert"), "Warning");
-		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "~Clock", 5);
-		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Information");
+		$this->RegisterVariableString("UPSTimeLeft", $this->Translate("Time left (minutes)"), "", 5);
+		IPS_SetIcon($this->GetIDForIdent("UPSTimeLeft"), "Clock");
 
 	}
 
